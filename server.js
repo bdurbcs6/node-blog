@@ -8,6 +8,7 @@ const PORT = 8000;
 
 server.use(express.json());
 
+//------------users-------------------
 server.get('/users', (req, res) => {
   userdb.get()
   .then(users => 
@@ -19,6 +20,30 @@ server.get('/users', (req, res) => {
 })
 
 
+// posts-----------------------------
+
+server.get('/posts', (req, res) => {
+  postdb.get()
+  .then(posts => {
+    res.status(200).json(posts)
+  })
+  .catch(() => {
+    res.status(500).json({error: "Can't sit here... seats taken"})
+  })
+})
+
+
+//  tags-----------------------------
+
+server.get('/tags', (req, res) => {
+  tagdb.get()
+  .then(tags => {
+    res.status(200).json(tags)
+  })
+  .catch(() => {
+    res.status(500).json({error: "No Tags Tags"})
+  })
+})
 server.listen(PORT, () => {
   console.log(`Server up and running on port: ${PORT}`)
 });
