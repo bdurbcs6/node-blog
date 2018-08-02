@@ -75,7 +75,7 @@ server.put('/users/:id', (req, res) => {
     }
   })
   .catch(() => {
-    res.status(500).json({message: "User was updated!"})
+    res.status(500).json({message: "No Dice"})
   })
 })
 
@@ -159,7 +159,7 @@ server.put('/posts/:id', (req, res) => {
     }
   })
   .catch(() => {
-    res.status(500).json({message: "Post was updated!"})
+    res.status(500).json({message: "No Dice"})
   })
 })
 
@@ -205,18 +205,48 @@ server.get('/tags/:id', (req, res) => {
 
 server.post('/tags', (req, res) => {
   const taggy = req.body
-  if (!taggy.tag) {
+  if (!taggy) {
     res.status(400).json({error: "Gots to give us a tag"})
   }
-  postdb.insert(taggy)
+  tagdb.insert(taggy)
   .then(id => {
-    res.status(200).send(id)
+    res.status(200).json(id)
   })
   .catch(() => {
     res.status(500).json({error: "could not tag"})
   })
 })
 
+server.put('/tags/:id', (req, res) => {
+  const {id} = req.params
+  const tag = req.body
+  tagdb.update(id, tag)
+  .then(updated => {
+    if (updated != 1) {
+      res.status(400).json({message: "nope"})
+    } else {
+      res.status(200).json({message: "tag updated"})
+    }
+  })
+  .catch(() => {
+    res.status(500).json({message: "No Dice"})
+  })
+})
+
+server.delete('/tags/:id', (req, res) => {
+  const {id} = req.params
+  tagdb.remove(id)
+  .then(deleted => {
+    if (deleted != 1) {
+      res.status(400).json({error: "no tag yo"})
+    } else {
+      res.status(200).json({message: "Tag was deleted"})
+    }
+  })
+  .catch(() => {
+    res.status(500).json({error: "No Dice"})
+  })
+})
 
 
 server.listen(PORT, () => {
