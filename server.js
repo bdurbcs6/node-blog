@@ -44,7 +44,7 @@ server.post('/users', (req, res) => {
     res.status(200).send(id)
   })
   .catch(() => {
-    res.status(500).json({error: "could not remove"})
+    res.status(500).json({error: "could not post"})
   })
 })
 
@@ -120,7 +120,7 @@ server.get('/posts/:id', (req, res) => {
 
 server.post('/posts', (req, res) => {
   const post = req.body
-  if (!post.text) {
+  if (!post.text || !post.userId) {
     res.status(400).json({error: "Gots to give us a name"})
   }
   postdb.insert(post)
@@ -128,7 +128,38 @@ server.post('/posts', (req, res) => {
     res.status(200).send(id)
   })
   .catch(() => {
-    res.status(500).json({error: "could not remove"})
+    res.status(500).json({error: "could not post"})
+  })
+})
+
+server.delete('/posts/:id', (req, res) => {
+  const {id} = req.params
+  postdb.remove(id)
+  .then(deleted => {
+    if (deleted != 1) {
+      res.status(400).json({error: "no post yo"})
+    } else {
+      res.status(200).json({message: "Post was deleted"})
+    }
+  })
+  .catch(() => {
+    res.status(500).json({error: "epic fail"})
+  })
+})
+
+server.put('/posts/:id', (req, res) => {
+  const {id} = req.params
+  const post = req.body
+  postdb.update(id, post)
+  .then(updated => {
+    if (updated != 1) {
+      res.status(400).json({message: "nope"})
+    } else {
+      res.status(200).json({message: "post updated"})
+    }
+  })
+  .catch(() => {
+    res.status(500).json({message: "Post was updated!"})
   })
 })
 
