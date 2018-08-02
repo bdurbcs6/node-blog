@@ -2,13 +2,17 @@ const express = require('express');
 const tagdb = require('../data/helpers/tagDb');
 const router = express.Router();
 
+const serverError = (res) => {
+  res.status(500).json({ message: "Server Error!"})
+}
+
 router.get('/', (req, res) => {
   tagdb.get()
   .then(tags => {
     res.status(200).json(tags)
   })
   .catch(() => {
-    res.status(500).json({error: "No Tags Tags"})
+    return serverError(res)
   })
 })
 
@@ -24,7 +28,7 @@ router.get('/:id', (req, res) => {
     }
   })
   .catch(() => {
-    res.status(500).json({error: "you gots an error"})
+    return serverError(res)
   })
 })
 
@@ -38,7 +42,7 @@ router.post('/', (req, res) => {
     res.status(201).json(id)
   })
   .catch(() => {
-    res.status(500).json({error: "could not tag"})
+    return serverError(res)
   })
 })
 
@@ -54,7 +58,7 @@ router.put('/:id', (req, res) => {
     }
   })
   .catch(() => {
-    res.status(500).json({message: "No Dice"})
+    return serverError(res)
   })
 })
 
@@ -69,7 +73,7 @@ router.delete('/:id', (req, res) => {
     }
   })
   .catch(() => {
-    res.status(500).json({error: "No Dice"})
+    return serverError(res)
   })
 })
 
