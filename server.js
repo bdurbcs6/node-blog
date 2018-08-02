@@ -103,6 +103,35 @@ server.get('/posts', (req, res) => {
   })
 })
 
+server.get('/posts/:id', (req, res) => {
+  const {id} = req.params
+  postdb.get(id)
+  .then(post => {
+    if (!post) {
+      res.status(404).json({error: "That post cannot be found"})
+    } else {
+      res.status(200).json(post)
+    }
+  })
+  .catch(() => {
+    res.status(500).json({error: "you gots an error"})
+  })
+})
+
+server.post('/posts', (req, res) => {
+  const post = req.body
+  if (!post.text) {
+    res.status(400).json({error: "Gots to give us a name"})
+  }
+  postdb.insert(post)
+  .then(id => {
+    res.status(200).send(id)
+  })
+  .catch(() => {
+    res.status(500).json({error: "could not remove"})
+  })
+})
+
 
 //  tags-----------------------------
 
