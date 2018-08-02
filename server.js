@@ -41,7 +41,7 @@ server.post('/users', (req, res) => {
   }
   userdb.insert(user)
   .then(id => {
-    res.status(200).send(id)
+    res.status(201).send(id)
   })
   .catch(() => {
     res.status(500).json({error: "could not post"})
@@ -125,7 +125,7 @@ server.post('/posts', (req, res) => {
   }
   postdb.insert(post)
   .then(id => {
-    res.status(200).send(id)
+    res.status(201).send(id)
   })
   .catch(() => {
     res.status(500).json({error: "could not post"})
@@ -210,7 +210,7 @@ server.post('/tags', (req, res) => {
   }
   tagdb.insert(taggy)
   .then(id => {
-    res.status(200).json(id)
+    res.status(201).json(id)
   })
   .catch(() => {
     res.status(500).json({error: "could not tag"})
