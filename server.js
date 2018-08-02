@@ -121,7 +121,7 @@ server.get('/posts/:id', (req, res) => {
 server.post('/posts', (req, res) => {
   const post = req.body
   if (!post.text || !post.userId) {
-    res.status(400).json({error: "Gots to give us a name"})
+    res.status(400).json({error: "Gots to give us a post"})
   }
   postdb.insert(post)
   .then(id => {
@@ -163,6 +163,17 @@ server.put('/posts/:id', (req, res) => {
   })
 })
 
+server.get('/posts/tags/:id', (req, res) => {
+  const {id} = req.params
+  postdb.getPostTags(id)
+  .then(tags => {
+    res.status(200).json(tags)
+  })
+  .catch(() => {
+    res.status(500).json({message: "Danger Will Robinson"})
+  })
+})
+
 
 //  tags-----------------------------
 
@@ -175,6 +186,39 @@ server.get('/tags', (req, res) => {
     res.status(500).json({error: "No Tags Tags"})
   })
 })
+
+
+server.get('/tags/:id', (req, res) => {
+  const {id} = req.params
+  tagdb.get(id)
+  .then(tag => {
+    if (!tag) {
+      res.status(404).json({error: "That tag cannot be found"})
+    } else {
+      res.status(200).json(tag)
+    }
+  })
+  .catch(() => {
+    res.status(500).json({error: "you gots an error"})
+  })
+})
+
+server.post('/tags', (req, res) => {
+  const taggy = req.body
+  if (!taggy.tag) {
+    res.status(400).json({error: "Gots to give us a tag"})
+  }
+  postdb.insert(taggy)
+  .then(id => {
+    res.status(200).send(id)
+  })
+  .catch(() => {
+    res.status(500).json({error: "could not tag"})
+  })
+})
+
+
+
 server.listen(PORT, () => {
   console.log(`Server up and running on port: ${PORT}`)
-});
+})
