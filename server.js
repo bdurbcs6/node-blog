@@ -12,7 +12,11 @@ server.use(express.json());
 
 server.use('/users', userRoutes);
 server.use('/posts', postRoutes);
-server.use('/tags', tagRoutes)
+server.use('/tags', tagRoutes);
+
+server.get('*', (req, res) => {
+  res.status(404).send({ message: "Never go that way!"})
+})
 
 
 server.listen(PORT, () => {
