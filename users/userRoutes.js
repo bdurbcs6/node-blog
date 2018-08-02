@@ -7,6 +7,16 @@ const serverError = (res) => {
   res.status(500).json({ message: "Server Error!"})
 }
 
+// const authentication = (req, res, next) => {
+//   if (req.body.password !== 123) {
+//     res.status(345).json({ message: "you fail"})
+//     next()
+//   } else{
+//     next()
+//   }
+
+// }
+
 
 router.get('/', (req, res) => {
   userdb.get()
